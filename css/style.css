@@ -1,0 +1,153 @@
+.dialog-box{
+	font:normal 12px '\5FAE\8F6F\96C5\9ED1';
+	height:auto;
+	position: fixed;
+	display:none;
+	top:30%;
+	left:50%;
+	z-index: 99999;
+	width:400px;
+	margin-left: -200px;
+	margin-top:-150px;
+}
+
+.dialog-box.show{
+	display: block;
+	opacity: 1;
+}
+
+.dialog-box-container {
+	position: relative;
+	margin:0 auto;
+	box-shadow: 0 0 10px #bbb;
+	border-radius: 10px 10px 0 0;
+	background-color: #ece9d8;
+	
+}
+
+.dialog-box-container.show{
+	display: block;
+	opacity: 1;
+}
+
+
+.dialog-box-title{
+	height:36px;
+	line-height: 36px;
+	padding:0 15px;
+	color:#fff;
+	background-color: #306af4;
+	border-radius: 10px 10px 0 0;
+}
+
+.dialog-box-title h3{
+	font-size:14px;
+	font-weight: bold;
+	margin:0;
+	float:left;
+}
+
+.dialog-box-close{
+	font-size:20px;
+	margin-left: 20px;
+	height:18px;
+	width:18px;
+	text-align: center;
+	line-height: 18px;
+	margin-top: 9px;
+	padding: 0;
+	font-weight: normal;
+	float: right;
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid  #fff;
+	background-color: red;
+	border-radius: 5px;
+}
+
+.dialog-box-close:hover{
+	color:#f5694b;
+}
+
+.dialog-box-content{
+	font-family: 'Microsoft YaHei';
+	padding:15px;
+	margin:0;
+}
+
+.widget{
+	position: relative;
+	
+	/*height:300px;	*/
+}
+
+.widget fieldset{
+	margin-top: 10px;
+}
+.content1 span{
+	margin-left: 100px
+}
+/*.content2:last-child{
+	text-align: center;
+	padding-top: 5px;
+}*/
+.content2 input{
+	margin-left: 15px;
+}
+.content3:nth-child(3){
+	text-align: center;
+	margin-top: 5px;
+}
+
+.content3:nth-child(3) input{
+	margin-left:20px;
+}
+.content3:nth-child(4) input,.content3:nth-child(4) label{
+	margin-left: 0;
+	padding-left: 0;
+}
+.content3:nth-child(4) input{
+	width:25%;
+}
+.content2,.content3,.content4{
+	padding-top:2px;
+	padding-bottom: 4px;
+	position: relative;
+}
+.content1>label,.content2>label,.content3>label{
+	padding-left:20px;
+}
+
+.content2 input[type=text], .content3:nth-child(2) input[type=text]{
+	float:right;
+	margin-right: 30px;
+}
+.content4 p{
+	text-align: center;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+.content4 input[type=text]{
+	width:100%;
+}
+
+.dialog-box-footer {
+	margin:0;
+	height:25px;	
+}
+.btnGroup {
+	padding-left: 40%;
+	padding-top: 10px;
+}
+
+.content2 > .btnGroup,.content3 > .btnGroup{
+	padding-left: 0;
+}
+
+.dialog-box-footer > .btnGroup > input {
+	margin-right: 10px;
+}
+
+
+
+

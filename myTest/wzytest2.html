@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/jquery-1.12.4.min.js"></script>
+    <script src="../lib/jquery.contextmenu.js"></script>
+    <style>
+        #box{
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+
+
+<div class="contextMenu" id="myMenu1">
+    <ul>
+        <li id="open"> 打开</li>
+        <li id="email"> 邮件</li>
+        <li id="save"> 保存</li>
+        <li id="delete"> 关闭</li>
+    </ul>
+</div>
+<script>
+    $("#box").contextMenu('myMenu1',
+            {
+                bindings:
+                {
+                    'open': function(t) {
+                        alert('Trigger was '+t.id+'\nAction was Open');
+                    },
+                    'email': function(t) {
+                        alert('Trigger was '+t.id+'\nAction was Email');
+                    },
+                    'save': function(t) {
+                        alert('Trigger was '+t.id+'\nAction was Save');
+                    },
+                    'delete': function(t) {
+                        alert('Trigger was '+t.id+'\nAction was Delete');
+                    }
+                }
+            });
+</script>
+</body>
+</html>

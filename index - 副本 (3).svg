@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="gbk" standalone="yes"?>
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg id="svg" width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="init('SG.XIANGJIABAYOUANDC',evt)">
+<script type="text/javascript" xlink:href="js/svg.js"></script>
+<script type="text/javascript" xlink:href="js/xml.js"></script>
+<script type="text/javascript" xlink:href="js/abc.js"></script>
+<script type="text/javascript" xlink:href="js/draw.js"></script>
+
+
+ <script type="text/javascript"><![CDATA[
+		var svg=document.getElementById("svg");
+		var parentWnd=window.parent;
+		
+		function init(stationName,evt){
+			var stationName = stationName;
+			var category = {};
+			drawBigRect("8888","0","0","2500","2000","black","black","2",svg);//
+			var G= parseAllXML("xml/"+stationName+".xml");
+			var nodes = G.childNodes;
+			var number = 0;
+			for(var i=1;i<nodes.length;i+=2){
+				var node = nodes[i];
+				var nodeName = node.nodeName;
+				var nodeType = node.nodeType;
+				if(nodeType==3){continue;}
+				if(nodeName=="Layer"){
+					var layer_id = node.getAttribute("id");
+					var layer_w = node.getAttribute("w");
+					var layer_h = node.getAttribute("h");
+					var layer_x = node.getAttribute("x");
+					var layer_y = node.getAttribute("y");
+					
+	
+					if(node.hasChildNodes()){
+						var tuyuan_nodes = node.childNodes;
+						var count = 1;
+
+						for(var k=1;k<tuyuan_nodes.length;k+=2){
+							var tuyuan_node=tuyuan_nodes[k];
+							var tuyuan_nodeName = tuyuan_node.nodeName;
+							number++;
+							if(!(tuyuan_nodeName in category)){
+								category[tuyuan_nodeName] = "true";
+							}
+							var tuyuan_nodeType = tuyuan_node.nodeType;
+							//if(tuyuan_nodeType==3){continue;}//
+							var property =getProperties(tuyuan_node);//Í¼Ôª½ÚµãµÄÊôÐÔÁÐ±í
+							
+							switch(tuyuan_nodeName){
+								
+								case "line":
+								case "Bus":
+									var lc = property.lc;
+									var color = property.color;
+									var state = property.state1;
+									if(color){
+										lc = color;
+									}
+									lc = state == "0" ? "255,255,255" : "255,0,0";
+
+									  drawLine(property.id,svg,property.x1,property.y1,property.x2,property.y2,lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+								case "rect"://¾ØÐÎ
+									  property.lc = "255,255,255";
+									  var stroke_dasharray = 10;
+									  drawRect(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType,stroke_dasharray);
+									  break;
+								case "roundrect"://Ô²½Ç¾ØÐÎ
+									  drawRoundrect(property.id,svg,property.x,property.y,property.w,property.h,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "circle":
+									  drawCircle(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "ellipse":
+									  drawEllipse(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "circlearc":
+									  drawCirclearc(property.id,svg,property.cx,property.cy,property.r,property.a1,property.a2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+									  break;
+								case "ellipsearc":
+									  drawEllipsearc(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.a1,property.a2,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+									  break;
+								case "polyline":
+									  drawPolyline(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+								case "polygon":
+									  drawPolygon(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "triangle":
+									  drawTriangle(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "parallelrect":
+									  drawParallelrect(property.id,svg,property.x,property.y,property.w,property.h,property.dx,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "diamond":
+									  drawDiamond(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "Text":
+									  drawText(property.id,svg,property.x,property.y,property.ts,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.wm,property.ff,property.fs,property.FontDeltaX,property.FontDeltaY,property.FontInterval,property.RowInterval,property.MatrixFontFlag,property.ZoomMaxLevel);
+									  break;
+								case "image":
+									  <!-- drawImage(property.id,svg,property.x,property.y,property.w,property.h,property.ahref,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShowType); -->
+									  break;
+	
+	
+								
+								case "DText":
+									  drawDText(property,svg);
+									  break;
+								case "ConnectLine"://
+									  drawConnectLine(property,svg,tuyuan_nodes,stationName);
+									  break;
+								case "pin"://¶Ë×Ó
+									  drawPin(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+								  	break;
+ 
+							    case "ACLine"://
+							    case "DCLine":
+								case "ACLineEnd"://	 
+								case "EnergyConsumer"://
+									property.color = property.color == "255,255,255" ? "255,0,0" : property.color;
+									  drawPolyline(property.id,svg,property.d,property.color,property.color,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+	
+								
+								//»­Í¼ÔªÀàÐÍµÄµçÍøÍ¼Ôª
+
+									  
+								case "Disconnector"://¸ôÀëµ¶Õ¢
+								case "GroundDisconnector"://½ÓµØµ¶Õ¢
+								case "CBreaker":
+									  var Ref = property.devref;
+									  if(Ref!=null){
+										 var devrefs = Ref.split("g:");
+										 var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//ÒÔ³§Õ¾ÃûÃüÃûµÄÎÄ¼þÄ¿Â¼ÏÂ£¬ÒÔ·ÖºÅºó×Ö·û´®ÎªÎÄ¼þÃû
+										 if(Ref.indexOf("¶ÏÂ·Æ÷")>-1){
+										    xmlFile = "tuyuan/JL_duanluqi.dlq.icn.xml";
+										 }else if(Ref.indexOf("GroundDaoZha18")>-1){
+										 	xmlFile = "EC_GroundDaoZha18.xml";
+										 }
+										 else if(Ref.indexOf("µ¶Õ¢")>-1){
+											xmlFile = "tuyuan/JL_daozha.gld.icn.xml";
+										 }else if(Ref.indexOf("·¢µç»ú")>-1){
+											xmlFile = "tuyuan/JL_fadianji.fdj.icn.xml";
+										 }
+										 var id = devrefs[1].substring(3);
+										 
+										 var tagName = tuyuan_nodeName;
+
+										 drawTuYuanWithPoint(property,id,tagName,xmlFile,svg);
+									  }						  
+									  break;
+								
+									
+								case "Transformer2"://Á½¾í±äÑ¹Æ÷
+								case "Transformer3"://Èý¾í±äÑ¹Æ÷
+									  	var Ref = property.devref;
+									  	if(Ref!=null){
+										 var devrefs = Ref.split("g:");
+										 var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";
+										 var id = devrefs[1].substring(3);
+										 var tagName = tuyuan_nodeName;
+										 drawTransform(property,id,tagName,xmlFile,svg);
+									  }	
+									  break;
+								case "RcBreaker":
+									var xx = property.x;
+									var yy = property.y;
+									var Ref = property.devref;
+
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//ÒÔ³§Õ¾ÃûÃüÃûµÄÎÄ¼þÄ¿Â¼ÏÂ£¬ÒÔ·ÖºÅºó×Ö·û´®ÎªÎÄ¼þÃû
+										if(Ref.indexOf("EC_HD_CapacitiveS1")>-1){
+										    xmlFile = "EC_HD_CapacitiveS1.rck.icn.xml";
+										 }else if(Ref.indexOf("EC_HD_CapacitiveS2")>-1){
+											xmlFile = "EC_HD_CapacitiveS2.rck.icn.xml";
+										 }
+										 var id = devrefs[1].substring(3);
+										 var tagName = tuyuan_nodeName;
+										 //drawTuYuan(id,svg,tagName,xmlFile,xx,yy);
+										 drawTuYuan(property,svg,id,tagName,xmlFile)
+									  }							  
+									  break;
+
+								case "Capacitor_P"://²¢ÁªµçÈÝ			
+								case "Capacitor_S"://´®ÁªµçÈÝ
+								case "PowerFlow"://³±Á÷·½Ïò
+								case "TerminalUnit"://ÖÕ¶ËÉè±¸
+								case "Generator"://·¢µç»ú
+								case "PT"://µçÑ¹»¥¸ÐÆ÷
+								case "CT"://µçÁ÷»¥¸ÐÆ÷
+									var Ref = property.devref;
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";
+										var id = devrefs[1].substring(3);
+										var tagName = tuyuan_nodeName;
+										drawTuYuan(property,svg,id,tagName,xmlFile)
+									  }
+									  break;
+								case "Reactor_P":
+								case "Reactor_S":
+									var Ref = property.devref;
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";
+										var id = devrefs[1].substring(3);
+										var tagName = tuyuan_nodeName;
+									 drawTuYuan(property,svg,id,tagName,xmlFile);
+									 }
+									 break;
+								case "Fuse"://ÈÛ¶ÏÆ÷
+									  break;
+								case "Protect"://±£»¤Í¼Ôª
+									  break;
+								case "State"://¹¤¿öÍ¼Ôª
+									  break;
+								case "Status"://×´Ì¬Í¼Ôª
+									  break;
+								case "Token"://±êÖ¾ÅÆ
+									  break;
+								
+									  
+								case "Ascoil"://Ïû»¡ÏßÈ¦
+									  break;
+								case "Arrester"://±ÜÀ×Æ÷
+									  break;
+								
+								case "Bay":
+									var Ref = property.devref;
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";
+										var id = devrefs[1].substring(3);
+										var tagName = tuyuan_nodeName;
+										drawBay(property,id,tagName,xmlFile,stationName,svg);
+									}
+									break;
+								case "RectifierInverter":
+									var Ref = property.devref;
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";
+										var id = devrefs[1].substring(3);
+										var tagName = tuyuan_nodeName;
+										drawTuYuan(property,svg,id,tagName,xmlFile)
+									  }
+									  break;
+
+
+									
+							}
+						}
+					}
+				}
+			}
+			console.log(category);
+			
+		}
+		
+		//»­Í¼Ôª
+
+
+		//µÃµ½Í¼ÔªµÄÊôÐÔ
+		function getProperties(node){
+			var properties = new Object;
+			var attrList=node.attributes;//ͼԪ�ڵ�������б�
+			for(var j=0;j<attrList.length;j++){
+				properties[attrList[j].name]=attrList[j].value;
+			}
+			return properties;
+		}
+
+
+
+  ]]></script>
+
+</svg>

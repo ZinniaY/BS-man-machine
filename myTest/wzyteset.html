@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /**{*/
+            /*margin: 0;*/
+            /*padding: 0;*/
+        /*}*/
+        #box{
+            width: 50px;
+            height: 50px;
+            background-color: pink;
+            margin:100px;
+            /*css3中的scale，y值为负数时，沿着水平x轴翻转*/
+            /*transform: scale(1,-1);*/
+            transform: scale(1,-1.5);
+            /*transform: rotate(180deg) scale(1.25,1.25);*/
+        }
+    </style>
+</head>
+<body>
+<!--<div id="div">-->
+    <div id="box">你好</div>
+   <!--<div>-->
+       <!--<span>-->
+           <!--<span>-->
+               <!--<span></span>-->
+           <!--</span>-->
+       <!--</span>-->
+   <!--</div>-->
+<!--</div>-->
+
+
+<script>
+    console.log( document.getElementById( "div" ).childNodes );
+</script>
+</body>
+</html>

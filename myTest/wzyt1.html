@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>观察者模式</title>
+</head>
+<body>
+<script>
+    class Subject {
+
+        constructor() {
+            this.observerCollection = [];
+        }
+
+        registerObserver(observer) {
+            this.observerCollection.push(observer);
+        }
+
+        unregisterObserver(observer) {
+            let index = this.observerCollection.indexOf(observer);
+            if(index >= 0) this.observerCollection.splice(index, 1);
+        }
+
+        notifyObservers() {
+            this.observerCollection.forEach((observer)=>observer.notify());
+        }
+    }
+
+    class Observer {
+
+        constructor(name) {
+            this.name = name;
+        }
+
+        notify() {
+            console.log(`${this.name} has been notified.`);
+        }
+    }
+
+
+    let subject = new Subject(); // 创建主题对象
+
+    let observer1 = new Observer('semlinker'); // 创建观察者A - 'semlinker'
+    let observer2 = new Observer('lolo'); // 创建观察者B - 'lolo'
+
+    subject.registerObserver(observer1); // 注册观察者A
+    subject.registerObserver(observer2); // 注册观察者B
+
+    subject.notifyObservers(); // 通知观察者
+
+    subject.unregisterObserver(observer1); // 移除观察者A
+
+    subject.notifyObservers(); // 验证是否成功移除
+</script>
+</body>
+</html>

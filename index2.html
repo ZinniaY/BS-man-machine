@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+	<title>厂站图</title>
+	<script type="text/javascript" src="js/svg.js"></script>
+	<script type="text/javascript" src="js/xml.js"></script>
+	<script type="text/javascript" src="js/draw.js"></script>
+	<script src = "js/init.js"></script>
+	
+	
+	<!-- <script src = "js/jquery.contextmenu-dialog.js"></script> -->
+	
+
+	<link rel="stylesheet" href = "css/jquery.contextmenu.css"></link>
+	<!-- <link rel="stylesheet" href = "css/jquery.dialogbox.css"></link> -->
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" href="css/style-1.css">
+
+	<style>
+		#container{
+			float:left;
+		}
+		.clearDiv{
+			clear:both;
+		}
+		html{
+			overflow:sroll;
+		}
+		
+	</style>
+	
+</head>
+<body>
+	<div id="container">
+		<svg xmlns = "http://www.w3.org/2000/svg" version = "1.1" height = "2000px" width = "2500px" id = "svg"></svg>
+	</div>
+
+	<div class = "clearDiv"></div>
+	<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+	<script src="lib/jquery-1.12.4.min.js"></script>
+	<!--[if (lt IE 9) & (!IEMobile)]>
+    <script src="lib/respond.min.js"></script>
+    <script src="lib/html5.js"></script>
+    <![endif]-->
+	<script src="lib/jquery-ui.min.js"></script>
+	<script src="js/dialogBox.js"></script>
+	<script src="lib/jquery.contextmenu.js"></script>
+	<script>
+		$(window).load(function(){
+		    init('QZ.dayuanbiandianzhan.fac.pic');
+
+			$('.CBreaker').contextPopup({
+				// title:"开关操作",
+				hasgutterLine:true,
+				items:[
+					{label:"开关操作", icon:'icons/book-open-list.png',  action:function(){
+						return {type:'',title:'开关操作'}
+						}
+					}
+				]
+			});
+
+
+			$('.Generator').contextPopup({
+				title:"发电机操作",
+				hasgutterLine:true,
+				items:[
+					{label:"出力调整",icon:'icons/book-open-list.png',action:function(e){
+							return {type:'adjust',
+									title:'出力调整'};
+								// $(e.target).dialogBox({
+
+								// });
+								// console.log(e.target);
+							}},
+					{label:"机组投切",icon:'icons/book-open-list.png',action:function(){alert('click2')}},
+					{label:"测点信息",icon:'icons/book-open-list.png',action:function(){alert('click3')}}
+
+				]
+			});
+
+
+			$('.EnergyConsumer').contextPopup({
+				title:"负荷",
+				hasgutterLine:true,
+				items:[
+					{label:"调整负荷",icon:'icons/book-open-list.png',action:function(){alert('click1')}},
+					{label:"负荷投切",icon:'icons/book-open-list.png',action:function(){alert('click2')}},
+					{label:"测点信息",icon:'icons/book-open-list.png',action:function(){alert('click3')}}
+
+				]
+			});
+
+			$('.Transformer2,.Transformer3').contextPopup({
+				title:'变压器',
+				hasgutterLine:true,
+				items:[
+					{label:"调整分接头", icon:'icons/book-open-list.png' ,action:function(){alert('click1')}},
+					{label:"变压器投切", icon:'icons/book-open-list.png' ,action:function(){alert('click2')}},
+					{label:"测点信息", icon:'icons/book-open-list.png' ,action:function(){alert('click3')}}
+
+				]
+
+			});
+			
+		})
+	</script>
+
+
+	
+</body>
+</html>

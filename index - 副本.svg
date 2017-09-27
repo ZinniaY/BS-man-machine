@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="gbk" standalone="yes"?>
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg id="svg" width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="init('SC.SICHUAN_XUFU_500kV',evt)">
+<script type="text/javascript" xlink:href="js/svg.js"></script>
+<script type="text/javascript" xlink:href="js/xml.js"></script>
+<script type="text/javascript" xlink:href="js/draw.js"></script>
+
+ <script type="text/javascript"><![CDATA[
+		var svg=document.getElementById("svg");
+		var parentWnd=window.parent;//方便在svg里调用html中的函数
+		
+		function init(stationName,evt){	
+			var category = {};
+			drawBigRect("8888","0","0","2500","2000","black","black","2",svg);//绘制背景
+			var G= parseAllXML("xml/"+stationName+".xml");//得到文件的G节点
+			var nodes = G.childNodes;
+			for(var i=0;i<nodes.length;i++){//遍历layer层
+				var node=nodes[i];
+				var nodeName = node.nodeName;
+				var nodeType = node.nodeType;
+				if(nodeType==3){continue;}
+				if(nodeName=="Layer"){		
+					var layer_id = node.getAttribute("id");
+					var layer_w = node.getAttribute("w");
+					var layer_h = node.getAttribute("h");
+					var layer_x = node.getAttribute("x");
+					var layer_y = node.getAttribute("y");
+					
+	
+					if(node.hasChildNodes()){//判读layer层下有无子节点	
+						var tuyuan_nodes = node.childNodes;//获取所有的子节点,设备节点
+						var count = 1;
+						for(var k=0;k<tuyuan_nodes.length;k++){
+							var tuyuan_node=tuyuan_nodes[k];
+							var tuyuan_nodeName = tuyuan_node.nodeName;
+							if(!(tuyuan_nodeName in category)){
+								category[tuyuan_nodeName] = "true";
+							}
+							var tuyuan_nodeType = tuyuan_node.nodeType;
+							if(tuyuan_nodeType==3){continue;}//过滤文本内容
+							var property =getProperties(tuyuan_node);//图元节点的属性列表
+							
+							switch(tuyuan_nodeName){
+								//画基本的图形
+								case "line"://直线
+									  drawLine(property.id,svg,property.x1,property.y1,property.x2,property.y2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+								case "rect"://矩形
+									  property.lc = "255,255,255";
+									  var stroke_dasharray = 10;
+									  drawRect(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType,stroke_dasharray);
+									  break;
+								case "roundrect"://圆角矩形
+									  drawRoundrect(property.id,svg,property.x,property.y,property.w,property.h,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "circle"://圆
+									  drawCircle(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "ellipse"://椭圆
+									  drawEllipse(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "circlearc"://圆弧
+									  drawCirclearc(property.id,svg,property.cx,property.cy,property.r,property.a1,property.a2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+									  break;
+								case "ellipsearc"://椭圆弧
+									  drawEllipsearc(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.a1,property.a2,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+									  break;
+								case "polyline"://折线
+									  drawPolyline(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+								case "polygon"://多边形
+									  drawPolygon(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "triangle"://三角形
+									  drawTriangle(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "parallelrect"://平行四边形
+									  drawParallelrect(property.id,svg,property.x,property.y,property.w,property.h,property.dx,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+									  break;
+								case "diamond"://菱形
+									  drawDiamond(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+									  break;
+								case "Text"://静态文本
+									  drawText(property.id,svg,property.x,property.y,property.ts,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.wm,property.ff,property.fs,property.FontDeltaX,property.FontDeltaY,property.FontInterval,property.RowInterval,property.MatrixFontFlag,property.ZoomMaxLevel);
+									  break;
+								case "image"://图像
+									  <!-- drawImage(property.id,svg,property.x,property.y,property.w,property.h,property.ahref,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShowType); -->
+									  break;
+	
+	
+								//画其他非图元方式的点图元
+								case "DText"://动态文本
+									  drawDText(property,svg);
+									  break;
+								case "ConnectLine"://连接线
+									  drawConnectLine(property,svg,tuyuan_nodes);
+									  break;
+								case "pin"://端子
+									  drawPin(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+								  break;
+								case "Bus"://母线
+
+									  drawBus(property.id,svg,property.x1,property.y1,property.x2,property.y2,property.color,property.color,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break; 
+							    case "ACLine"://交流线段
+							    case "DCLine":
+								case "ACLineEnd"://交流线端	 
+								case "EnergyConsumer"://负荷
+									property.color = property.color == "255,255,255" ? "255,0,0" : property.color;
+									  drawPolyline(property.id,svg,property.d,property.color,property.color,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+									  break;
+	
+								
+								//画图元类型的电网图元
+
+									  
+								case "Disconnector"://隔离刀闸
+								case "GroundDisconnector"://接地刀闸
+								case "Generator"://发电机
+								case "CBreaker":
+									  var Ref = property.devref;
+									  if(Ref!=null){
+										 var devrefs = Ref.split("g:");
+										 var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//以厂站名命名的文件目录下，以分号后字符串为文件名
+										 if(Ref.indexOf("断路器")>-1){
+										    xmlFile = "tuyuan/JL_duanluqi.dlq.icn.xml";
+										 }else if(Ref.indexOf("GroundDaoZha18")>-1){
+										 	xmlFile = "EC_GroundDaoZha18.xml";
+										 }
+										 else if(Ref.indexOf("刀闸")>-1){
+											xmlFile = "tuyuan/JL_daozha.gld.icn.xml";
+										 }else if(Ref.indexOf("发电机")>-1){
+											xmlFile = "tuyuan/JL_fadianji.fdj.icn.xml";
+										 }
+										 var id = devrefs[1].substring(3);
+										 
+										 var tagName = tuyuan_nodeName;
+
+										 drawTuYuanWithPoint(property,id,tagName,xmlFile)
+									  }						  
+									  break;
+								
+									
+								case "Transformer2"://两卷变压器
+								case "Transformer3"://三卷变压器
+										var xx = property.x;
+									  	var yy = property.y;
+									  	var Ref = property.devref;
+									  	if(Ref!=null){
+										 var devrefs = Ref.split("g:");
+										 var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//以厂站名命名的文件目录下，以分号后字符串为文件名
+										 var id = devrefs[1].substring(3);
+										 var tagName = tuyuan_nodeName;
+										 drawTuYuan(id,tagName,xmlFile,xx,yy);
+									  }	
+									  break;
+								case "RcBreaker":
+									var xx = property.x;
+									var yy = property.y;
+									var Ref = property.devref;
+
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//以厂站名命名的文件目录下，以分号后字符串为文件名
+										if(Ref.indexOf("EC_HD_CapacitiveS1")>-1){
+										    xmlFile = "EC_HD_CapacitiveS1.rck.icn.xml";
+										 }else if(Ref.indexOf("EC_HD_CapacitiveS2")>-1){
+											xmlFile = "EC_HD_CapacitiveS2.rck.icn.xml";
+										 }
+										 var id = devrefs[1].substring(3);
+										 var tagName = tuyuan_nodeName;
+										 drawTuYuan(id,tagName,xmlFile,xx,yy);
+									  }							  
+									  break;
+
+								case "Capacitor_P"://并联电容			
+								case "Capacitor_S"://串联电容
+								case "PowerFlow"://潮流方向
+								case "TerminalUnit"://终端设备
+								case "PT"://电压互感器
+								case "CT"://电流互感器
+									var xx = property.x;
+									var yy = property.y;
+									var Ref = property.devref;
+									if(Ref!=null){
+										var devrefs = Ref.split("g:");
+										var xmlFile = "tuyuan/"+stationName + "/" + devrefs[1]+".xml";//以厂站名命名的文件目录下，以分号后字符串为文件名
+										var id = devrefs[1].substring(3);
+										var tagName = tuyuan_nodeName;
+										drawTuYuan(id,tagName,xmlFile,xx,yy);
+									  }
+									  break;
+								case "Reactor_P"://并联电抗
+								case "Reactor_S"://串联电抗
+									  <!-- drawReactor(id,tagName,xmlFile,xx,yy); -->
+								case "Fuse"://熔断器
+									  break;
+								case "Protect"://保护图元
+									  break;
+								case "State"://工况图元
+									  break;
+								case "Status"://状态图元
+									  break;
+								case "Token"://标志牌
+									  break;
+								
+									  
+								case "Ascoil"://消弧线圈
+									  break;
+								case "Arrester"://避雷器
+									  break;
+								
+								case "Bay"://间隔模板
+									  <!-- drawBay(id,tagName,xmlFile); -->
+									  break;
+							}
+						}
+					}
+				}
+			}
+			
+		}
+		
+		//画图元
+function drawTuYuan(id,tagName,xmlFile,xx,yy,scale,rotateAng){
+
+		var tuyuan= parseXML(id,tagName,xmlFile);//得到图元节点
+		var tuyuan_nodes = tuyuan.childNodes;
+			for(var i=0;i<tuyuan_nodes.length;i++){//遍历layer层
+				var layer=tuyuan_nodes[i];
+				var layer_nodeName = layer.nodeName;
+				var layerType = layer.nodeType;
+				if(layerType==3){continue;}
+				if(layer_nodeName=="Layer"){
+					var layer_w = parseInt(layer.getAttribute("w"));
+					var layer_h = parseInt(layer.getAttribute("h"));
+					var center_x = 	parseInt(xx) + layer_w/2;
+					var center_y =  parseInt(yy) + layer_h/2;
+					if(layer.hasChildNodes()){//判读layer层下有无子节点	
+						var layer_childnodes = layer.childNodes;
+						for(var k=0;k<layer_childnodes.length;k++){//遍历layer层下的字节点
+							var node = layer_childnodes[k];
+							var nodeName=node.nodeName;
+							var nodeType = node.nodeType;
+							if(nodeType==3){continue;}
+							var property = getProperties(node);	
+							
+							switch (nodeName)//根据子节点名画图
+							{
+							case "line":
+							  property.x1 = parseInt(property.x1)+parseInt(xx);
+							  property.y1 = parseInt(property.y1)+parseInt(yy);
+							  property.x2 = parseInt(property.x2)+parseInt(xx);
+							  property.y2 = parseInt(property.y2)+parseInt(yy);
+							 
+							  if(scale[0]==-1.0&&rotateAng == 180){
+								property.x1 = 2*center_x - property.x1 ;
+								property.x2 = 2*center_x - property.x2 ;
+							  }
+							  if(scale[1]==-1.0){
+								property.y1 = 2*center_y - property.y1 ;
+								property.y2 = 2*center_y - property.y2 ;
+							  }
+
+
+							  drawLine(property.id,svg,property.x1,property.y1,property.x2,property.y2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+							  break;
+							case "rect":
+							  property.x = parseInt(property.x)+parseInt(xx);
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawRect(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+							  break;
+							case "roundrect":
+							  property.x = parseInt(property.x)+parseInt(xx); 
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawRoundrect(property.id,svg,property.x,property.y,property.w,property.h,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+							  break;
+							case "circle":
+							  property.cx = parseInt(property.cx)+parseInt(xx); 
+							  property.cy = parseInt(property.cy)+parseInt(yy);
+							  
+
+							  drawCircle(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+							  break;
+							case "ellipse":
+							  property.cx = parseInt(property.cx)+parseInt(xx); 
+							  property.cy = parseInt(property.cy)+parseInt(yy);
+							  drawEllipse(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+							  break;
+							case "circlearc":
+							  property.cx = parseInt(property.cx)+parseInt(xx); 
+							  property.cy = parseInt(property.cy)+parseInt(yy);
+							  drawCirclearc(property.id,svg,property.cx,property.cy,property.r,property.a1,property.a2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+							  break;
+							case "ellipsearc":
+							  property.cx = parseInt(property.cx)+parseInt(xx);
+							  property.cy = parseInt(property.cy)+parseInt(yy);
+							  drawEllipsearc(property.id,svg,property.cx,property.cy,property.rx,property.ry,property.a1,property.a2,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ArcShape,property.DrawFlag);
+							  break;
+							case "polyline":
+							  drawPolyline(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+							  break;
+							case "polygon":
+							  drawPolygon(property.id,svg,property.d,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+							  break;
+							case "triangle":
+							  property.x = parseInt(property.x)+parseInt(xx); 
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawTriangle(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+							  break;
+							case "parallelrect":
+							  property.x = parseInt(property.x)+parseInt(xx);
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawParallelrect(property.id,svg,property.x,property.y,property.w,property.h,property.dx,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+							  break;
+							case "diamond":
+							  property.x = parseInt(property.x)+parseInt(xx); 
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawDiamond(property.id,svg,property.x,property.y,property.w,property.h,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShadowType);
+							  break;
+							case "text":
+							  //drawText(property.id,svg,property.x,property.y,property.ts,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.wm,property.ff,property.fs,property.FontDeltaX,property.FontDeltaY,property.FontInterval,property.RowInterval,property.MatrixFontFlag,property.ZoomMaxLevel);
+							  break;
+							case "image":
+							  property.x = parseInt(property.x)+parseInt(xx);
+							  property.y = parseInt(property.y)+parseInt(yy);
+							  drawImage(property.id,svg,property.x,property.y,property.w,property.h,property.ahref,property.lc,property.fc,property.lw,property.tfr,property.ls,property.fm,property.RoundBox,property.LevelStart,property.LevelEnd,property.ShowType);
+							  break;
+							case "pin":
+							  property.cx = parseInt(property.cx)+parseInt(xx); 
+							  property.cy = parseInt(property.cy)+parseInt(yy);
+							  
+
+							  
+							  drawPin(property.id,svg,property.cx,property.cy,property.r,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd);
+							  break; 
+							case "Bus":
+							  property.x1 = parseInt(property.x1)+parseInt(xx);
+							  property.y1 = parseInt(property.y1)+parseInt(yy); 
+							  property.x2 = parseInt(property.x2)+parseInt(xx); 
+							  property.y2 = parseInt(property.y2)+parseInt(yy);
+							  drawBus(property.id,svg,property.x1,property.y1,property.x2,property.y2,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.StartArrowType,property.EndArrowType,property.StartArrowSize,property.EndArrowSize);
+							  break; 
+							}
+						}
+					}
+				}
+			}
+		}
+
+	
+
+		//得到图元的属性
+		function getProperties(node){
+			var properties = new Object;
+			var attrList=node.attributes;//图元节点的属性列表
+			for(var j=0;j<attrList.length;j++){
+				properties[attrList[j].name]=attrList[j].value;
+			}
+			return properties;
+		}
+
+
+function drawDText(property,svg){
+	var x = parseInt(property.x);
+	var y = parseInt(property.y);
+	var ts = property.ts;
+	var value_temp = property.value;
+	var value;
+	if(!value_temp){
+		ts=ts.replace("←", "");
+		ts=ts.replace("→", "");
+		ts=ts.replace("↑", "");
+		ts=ts.replace("↓", "");
+		value=parseFloat(ts);
+	}else{
+		value = value_temp;
+	}
+
+	var text_value = Math.round(Math.abs(value));
+	if(value >= 0){
+		var p_ShowSignFlag = property.p_ShowSignFlag;
+		ts = p_ShowSignFlag == "8" ? "←" : (p_ShowSignFlag == "12" ? "→" : (p_ShowSignFlag == "16" ? "↑" : (p_ShowSignFlag == "20" ? "↓" : "" )));
+		ts = ts + text_value;
+	}else{
+		ts=("↓"+text_value);
+	}
+	drawText(property.id,svg,x,y,ts,property.lc,property.fc,property.lw,property.ls,property.fm,property.tfr,property.RoundBox,property.LevelStart,property.LevelEnd,property.wm,property.ff,property.fs,property.FontDeltaX,property.FontDeltaY,property.FontInterval,property.RowInterval,property.MatrixFontFlag,property.ZoomMaxLevel);
+}
+
+
+
+
+
+
+  ]]></script>
+
+</svg>

@@ -1,0 +1,182 @@
+.dialog-box{
+	font:normal 12px '\5FAE\8F6F\96C5\9ED1';
+	height:auto;
+	display:none;
+	position: fixed;
+/*	top:30px;
+	left:50%;*/
+	z-index: 99999;
+	width:400px;
+	/*margin-left: -200px;*/
+	overflow-y: auto;
+	/*margin-left: -200px;
+	margin-top:-150px;
+	margin-right: 10px;*/
+}
+
+.show{
+	display: block;
+}
+
+
+.dialog-box-container {
+	margin:0 auto;
+	box-shadow: 0 0 10px #bbb;
+	border-radius: 10px 10px 0 0;
+	background-color: #ece9d8;
+
+}
+
+
+.dialog-box-title{
+	height:30px;
+	line-height: 30px;
+	padding:0 15px;
+	color:#fff;
+	background-color: #306af4;
+	border-radius: 8px 8px 0 0;
+}
+
+.dialog-box-title h3{
+	font-size:12px;
+	font-weight: bold;
+	margin:0;
+	float:left;
+}
+
+.dialog-box-close{
+	font-size:24px;
+	height:18px;
+	width:18px;
+	text-align: center;
+	line-height: 18px;
+	margin-top:6px;
+	font-weight: normal;
+	float: right;
+	cursor: pointer;
+	/*display: inline-block;*/
+	border: 1px solid  #fff;
+	background-color: red;
+	border-radius: 5px;
+}
+
+.dialog-box-content{
+	font-family: 'Microsoft YaHei';
+	padding:0 15px 10px 15px;
+	margin:0;
+}
+
+
+
+.widget fieldset{
+	margin-top: 10px;
+}
+
+.content2,.content3,.content4{
+	padding-top:2px;
+	padding-bottom: 4px;
+	/*position: relative;*/
+}
+
+label + span{
+	margin-left: 100px;
+}
+.content1 label,.content2 label,.content3 label,.content4 label {
+	padding-left:20px;
+}
+
+label + input[type=text]{
+	float:right;
+	margin-right: 30px;
+}
+
+
+
+#busId,#busDescribe{
+	height:23px;
+	line-height: 23px;
+}
+#busId>input,#busDescribe>input{
+	width:70%;
+}
+p{
+	text-align: center;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+ul{
+	list-style: none;
+}
+ul > li{
+	padding-left: 20%;
+
+}
+
+ul > li > input,ul > li > span{
+	height:13px;
+	line-height: 13px;
+	vertical-align: middle;
+}
+
+
+.dialog-box-footer {
+	margin:0;
+}
+.dialog-box-footer .btnGroup {
+	padding-left: 40%;
+	padding-top: 10px;
+}
+
+.content2 .btnGroup,.content3 .btnGroup, .content4 .btnGroup{
+	margin-top: 2px;
+	text-align: center;
+	padding-left: 0;
+}
+
+#activePowerAdjust > input{
+	margin-right: 10px;
+	margin-left: 0;
+}
+.btnGroup > input{
+	margin-left: 40px;
+	margin-right: 30px;
+}
+
+.dialog-box-footer > .btnGroup > input {
+	margin-right: 10px;
+	margin-left: 0px;
+}
+
+input + span {
+	margin-left: 30px;
+}
+#adjust input + label{
+	padding-left: 0px;
+}
+
+.busControl {
+	margin-top: 3px;
+
+}
+#parameter {
+	width:100%;
+}
+
+#dialog-box-mask{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99998;
+	opacity: .3;
+	filter: alpha(opacity=30);
+	background: #000;
+	display: none;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+
+
+

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rx</title>
+    <script src="../lib/rx.all.js"></script>
+</head>
+<body>
+<script>
+    var observable = Rx.Observable
+                       .create(function(observer) {
+                           observer.next('Semlinker'); // RxJS 4.x 以前的版本用 onNext
+                           observer.next('Lolo');
+                       });
+
+    // 订阅这个 Observable
+    observable.subscribe(function(value) {
+        console.log(value);
+    });
+</script>
+</body>
+</html>
